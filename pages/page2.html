@@ -1,0 +1,45 @@
+<!-- about.html -->
+<style>
+  td, th {
+    padding-right: 10px;
+    padding-left: 10px;
+    font-size: 16px;
+  }
+  th {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .message-cell {
+    font-size: 12px;
+  }
+  .date-cell, .source-cell {
+    width: 18%;
+  }
+</style>
+<div class="jumbotron">
+  <div class="container-fluid">
+    <div ng-show="load_success">
+      <h2>{{ client_name }}</h2>
+      <div ng-show="data_found">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Date Created</th>
+              <th>Message</th>
+              <th>Enquiry Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="enquiry in enquiry_list" ng-click="enquiryClick(enquiry.id)">
+              <td class="date-cell">{{ enquiry.created_at }}</td>
+              <td class="message-cell">{{ enquiry.message }}</td>
+              <td class="source-cell">{{ enquiry.enquiry_source }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>{{ no_data_message }}</p>
+    </div>
+    <p>{{ empty_message }}</p>
+  </div>
+</div>

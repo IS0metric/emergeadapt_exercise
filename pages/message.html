@@ -1,28 +1,39 @@
-
 <div class="container">
-  <p ng-click="back()">Back</p>
+  <a href="" ng-click="back()"><span class="glyphicon glyphicon-chevron-left"></span>Back</a>
   <div class="row">
     <div class="col-md-2">
       <br/>
-      <p><b>Name: </b>{{ enquiry.name }}</p>
-      <p><b>Number: </b>{{ enquiry.contact_number }}</p>
-      <p><b>Email: </b>{{ enquiry.email_address }}</p>
-      <h3><b>Company: </b>{{ enquiry.company }}</h3>
+      <p><b>Name: </b>{{ enquiry.name || 'Not Found' }}</p>
+      <p><b>Number: </b>{{ enquiry.contact_number || 'Not Found' }}</p>
+      <p><b>Email: </b>{{ enquiry.email_address || 'Not Found' }}</p>
+      <hr/>
+      <h3><b>Company: </b>{{ enquiry.company || 'Not Found' }}</h3>
+      <p><b>Country: </b>{{ enquiry.country || 'Not Found' }}</p>
     </div>
     <div class="col-md-7">
-      <h3><b>Title: </b>{{ enquiry.title }}</h3>
+      <h3><b>Title: </b>{{ enquiry.title || 'Not Found' }}</h3>
       <h3><b>Message:</b></h3>
       <div class="well">
-        <p>{{ enquiry.message }}</p>
+        <p>{{ enquiry.message || 'No message found' }}</p>
       </div>
     </div>
     <div class="col-md-3">
       <br/>
-      <p><i><b>Created: </b>{{ enquiry.created_at }}</i></p>
-      <p><i><b>Updated: </b>{{ enquiry.updated_at }}</i></p>
+      <p><i><b>Created: </b>{{ (enquiry.created_at | date:'dd-M-yyyy, H:mm') || 'Not Found' }}</i></p>
+      <p><i><b>Updated: </b>{{ (enquiry.updated_at | date:'dd-M-yyyy, H:mm') || 'Not Found' }}</i></p>
       <hr/>
-      <p><b>Owned by: </b>{{ enquiry.owner_name }} | <i>{{ enquiry.owned_by_id }}</i></p>
-      <p><b>Case Type: </b>{{ enquiry.case_type }}</p>
+      <p><b>Owned by: </b>{{ enquiry.owner_name || 'No Name Found' }} | <i>{{ enquiry.owned_by_id || 'No ID Found' }}</i></p>
+      <p><b>Owned by Type: </b>{{ enquiry.owned_by_type || 'Unknown' }}</p>
+      <p><b>Case Type: </b>{{ enquiry.case_type || 'Not Found' }}</p>
+      <p><b>Current State: </b>{{ enquiry.current_state || 'Unknown' }}</p>
+    </div>
+  </div>
+  <hr/>
+  <div>
+    <input ng-model=collapse type=checkbox id="show_check">
+    <label for="show_check"><h4> Check to see full enquiry data</h4></label>
+    <div ng-show=collapse>
+      <pre>{{ pretty_enquiry }}</pre>
     </div>
   </div>
 </div>

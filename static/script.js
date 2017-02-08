@@ -48,18 +48,21 @@ app.service('saveData', function() {
 });
 
 app.controller('mainController', function($scope, $http, $location, saveData) {
+  $scope.error;
   $scope.client_reference = 29;
   $scope.getFunction = function() {
     var ref_number = $scope.client_reference;
-    console.log(ref_number);
-    console.log(angular.isNumber(parseInt(ref_number)));
-    // I attempted to parameterize the client reference and auth token, but for
-    // some reason whenever I did, I got CORS errors
-    $http.get("https://login.caseblocks.com/case_blocks/search?query=client_reference:"+ref_number+"&auth_token=bDm1bzuz38bpauzzZ_-z")
-    .then(function successCallback(response) {
-      saveData.setData(response.data);
-      $location.path("/case");
-    });
+    if (ref_number == null) {
+      $scope.error = "Invalid input";
+    } else {
+      // I attempted to parameterize the client reference and auth token, but
+      // for some reason whenever I did, I got CORS errors
+      $http.get("https://login.caseblocks.com/case_blocks/search?query=client_reference:"+ref_number+"&auth_token=bDm1bzuz38bpauzzZ_-z")
+      .then(function successCallback(response) {
+        saveData.setData(response.data);
+        $location.path("/case");
+      });
+    }
   }
 
 });
@@ -115,7 +118,7 @@ app.controller('caseController', function($scope, $location, saveData) {
           // pass forward an enquiry with the relevant details
           var enquiry = {
             id: id++,
-            created_at: current_case.created_at.slice(0, 10),
+            created_at: current_case.created_at,
             enquiry_source: current_case.enquiry_source,
             message: current_case.message
           };
@@ -133,6 +136,7 @@ app.controller('caseController', function($scope, $location, saveData) {
 
 app.controller('messageController', function($scope, $location, saveData) {
   $scope.enquiry = saveData.getEnquiry();
+  $scope.pretty_enquiry = JSON.stringify($scope.enquiry, undefined, 2);
 
   $scope.back = function() {
     $location.path("/case");

@@ -1,0 +1,32 @@
+td, th {
+  padding-right: 10px;
+  padding-left: 10px;
+  font-size: 16px;
+}
+
+th {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.message-cell {
+  font-size: 12px;
+}
+
+.date-cell, .source-cell {
+  width: 18%;
+}
+
+pre {
+    white-space: pre-wrap;
+    background: hsl(30,80%,90%);
+}
+
+.input-group {
+  width: 50%;
+  margin: 0 auto;
+}
+
+h4.error {
+  color: red;
+}

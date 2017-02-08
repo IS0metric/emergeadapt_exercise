@@ -1,9 +1,0 @@
-
--- NOTES --
-  - Followed this scotch.io AngularJS routing tutorial for the initial
-    groundwork:
-      https://scotch.io/tutorials/single-page-apps-with-angularjs-routing-and-templating
-  - Used a Python script (which requires the requests library) to check for
-    other client case reference numbers to test the application (ranging from 0
-    to 9999) but only found 29, the initial number given. The script can be
-    found in the repository

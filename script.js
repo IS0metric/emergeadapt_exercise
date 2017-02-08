@@ -4,35 +4,26 @@ var app = angular.module('app', ['ngRoute']);
 app.config(function($routeProvider) {
   $routeProvider
     .when('/', {
-        templateUrl : 'pages/page1.html',
+        templateUrl : 'pages/main.html',
         controller  : 'mainController'
     })
-    .when('/page2', {
-        templateUrl : 'pages/page2.html',
-        controller  : 'aboutController'
+    .when('/case', {
+        templateUrl : 'pages/case.html',
+        controller  : 'caseController'
     })
-    .when('/page3', {
-        templateUrl : 'pages/page3.html',
-        controller  : 'page3Controller'
+    .when('/message', {
+        templateUrl : 'pages/message.html',
+        controller  : 'messageController'
     });
 });
 
-//
+// Conficure saveData service
+// allows getting and setting data to be used between controllers
 app.service('saveData', function() {
-  var reference_number;
   var data;
   var enquiry;
 
-  var setRef = function(_ref) {
-    reference_number = _ref;
-  };
-
-  var getRef = function() {
-    return reference_number;
-  };
-
   var setData = function(_data) {
-    console.log("DATA SET");
     data = _data;
   };
 
@@ -53,37 +44,38 @@ app.service('saveData', function() {
     getData: getData,
     setEnquiry: setEnquiry,
     getEnquiry: getEnquiry,
-    setRef: setRef,
-    getRef: getRef,
   };
 });
 
 app.controller('mainController', function($scope, $http, $location, saveData) {
   $scope.client_reference = 29;
-  $scope.myFunction = function() {
+  $scope.getFunction = function() {
     var ref_number = $scope.client_reference;
-    $http({
-      method: "GET",
-      url: "https://login.caseblocks.com/case_blocks/search?query=client_reference:"+ref_number+"&auth_token=bDm1bzuz38bpauzzZ_-z"
-    }).then(function successCallback(response) {
+    console.log(ref_number);
+    console.log(angular.isNumber(parseInt(ref_number)));
+    // I attempted to parameterize the client reference and auth token, but for
+    // some reason whenever I did, I got CORS errors
+    $http.get("https://login.caseblocks.com/case_blocks/search?query=client_reference:"+ref_number+"&auth_token=bDm1bzuz38bpauzzZ_-z")
+    .then(function successCallback(response) {
       saveData.setData(response.data);
-      $location.path("/page2");
+      $location.path("/case");
     });
   }
 
 });
 
-app.controller('aboutController', function($scope, $location, saveData) {
+app.controller('caseController', function($scope, $location, saveData) {
   $scope.load_success = true;
   $scope.data_found = true;
   var data = saveData.getData();
   var client_case;
   var client_enquiry_case;
-  console.log(data);
   if (data === undefined) {
+    // catches a failed http request or corrupt data
     $scope.load_success = false;
     $scope.empty_message = "Failed to load data";
   } else if (data.length == 0) {
+    // catches cases where no data is returned
     $scope.data_found = false;
     $scope.no_data_message = "No data found";
   } else {
@@ -96,6 +88,7 @@ app.controller('aboutController', function($scope, $location, saveData) {
     }
 
     if (client_case !== undefined){
+      // if a client case is not undefined
       var not_found = true;
       for (n in client_case.cases) {
         var current_case = client_case.cases[n];
@@ -105,6 +98,8 @@ app.controller('aboutController', function($scope, $location, saveData) {
         }
       }
       if (not_found) {
+        // if no name can be found in any of the found client cases, change the
+        // name value to give a not found message
         $scope.client_name = "Client Name Not Found";
       }
     }
@@ -117,6 +112,7 @@ app.controller('aboutController', function($scope, $location, saveData) {
         var current_case = client_enquiry_case.cases[j];
         if (current_case.created_at && current_case.enquiry_source) {
           full_enquiry_list[id] = current_case;
+          // pass forward an enquiry with the relevant details
           var enquiry = {
             id: id++,
             created_at: current_case.created_at.slice(0, 10),
@@ -131,10 +127,14 @@ app.controller('aboutController', function($scope, $location, saveData) {
 
   $scope.enquiryClick = function(id) {
     saveData.setEnquiry(full_enquiry_list[id]);
-    $location.path("/page3");
+    $location.path("/message");
   }
 });
 
-app.controller('page3Controller', function($scope, saveData) {
+app.controller('messageController', function($scope, $location, saveData) {
   $scope.enquiry = saveData.getEnquiry();
+
+  $scope.back = function() {
+    $location.path("/case");
+  };
 });

@@ -1,0 +1,28 @@
+
+<div class="container">
+  <p ng-click="back()">Back</p>
+  <div class="row">
+    <div class="col-md-2">
+      <br/>
+      <p><b>Name: </b>{{ enquiry.name }}</p>
+      <p><b>Number: </b>{{ enquiry.contact_number }}</p>
+      <p><b>Email: </b>{{ enquiry.email_address }}</p>
+      <h3><b>Company: </b>{{ enquiry.company }}</h3>
+    </div>
+    <div class="col-md-7">
+      <h3><b>Title: </b>{{ enquiry.title }}</h3>
+      <h3><b>Message:</b></h3>
+      <div class="well">
+        <p>{{ enquiry.message }}</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <br/>
+      <p><i><b>Created: </b>{{ enquiry.created_at }}</i></p>
+      <p><i><b>Updated: </b>{{ enquiry.updated_at }}</i></p>
+      <hr/>
+      <p><b>Owned by: </b>{{ enquiry.owner_name }} | <i>{{ enquiry.owned_by_id }}</i></p>
+      <p><b>Case Type: </b>{{ enquiry.case_type }}</p>
+    </div>
+  </div>
+</div>
